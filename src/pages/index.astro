@@ -1,16 +1,50 @@
 ---
+import "../styles/global.css";
+
+const title = "LilSuperUser";
+const description =
+    "FOSS | Linux | Systems Programming | Reverse Engineering & Exploit Development";
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={description} />
+        <title>{title}</title>
+    </head>
+    <body>
+        <main>
+            <div>
+                <p class="status">POST_BOARD // PHASE_0</p>
+                <p class="message">
+                    Board is powered. Components are still being placed...
+                </p>
+            </div>
+        </main>
+    </body>
 </html>
+
+<style>
+    main {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        background: var(--board-surface);
+        color: var(--board-silkscreen);
+        font-family: var(--font-board);
+        text-align: center;
+    }
+
+    .status {
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        opacity: 0.6;
+    }
+
+    .message {
+        font-size: 1.1rem;
+    }
+</style>
