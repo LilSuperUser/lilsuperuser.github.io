@@ -1,0 +1,38 @@
+/*
+Two palettes (will) live side-by-side:
+    * 1. The BOARD palette (fixed)
+    * 2. The INTERFACE palette (light/dark preferences)
+*/
+
+:root {
+    /* ---- Board palette ---- */
+    --board-surface: #14140f;
+    --board-edge: #3a3830;
+    --board-chip: #211f19;
+    --board-chip-outline: #4a473c;
+    --board-silkscreen: #d8d4c4;
+    --board-trace-rest: #8a5a2e;
+    --board-trace-active: #e0994f;
+    --board-hero-glow: #e0994f;
+    --board-post-digit: #ff8c3c;
+    --board-post-bg: #0a0a08;
+
+    /* ---- Typography ---- */
+    --font-board:
+        "JetBrains Mono", "Space Mono", ui-monospace, "SFMono-Regular", Menlo,
+        monospace;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
