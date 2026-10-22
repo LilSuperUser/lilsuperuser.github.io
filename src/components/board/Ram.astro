@@ -1,0 +1,69 @@
+---
+// dimm slot geometry in mm; real ddr5 slots are 133.35 long
+const ramLabels = ["A1", "A2", "B1", "B2"];
+const ramX = 225;
+const ramY = 38;
+const ramPitch = 10;
+const slotLength = 133.35;
+
+const ram = ramLabels.map((label, i) => ({ label, x: ramX + i * ramPitch }));
+---
+
+<g id="ram">
+    {ram.map(({ label, x }) => (
+        <g>
+            <rect class="slot-body" x={x} y={ramY} width="7" height={slotLength} rx="1" />
+            <rect class="slot-channel" x={x + 2} y={ramY + 3} width="3" height={slotLength - 6} />
+            <line
+                class="slot-contacts"
+                x1={x + 3.5}
+                y1={ramY + 4}
+                x2={x + 3.5}
+                y2={ramY + slotLength - 4}
+            />
+            <rect class="slot-key" x={x + 2} y={ramY + 60} width="3" height="1.4" />
+            <rect class="slot-latch" x={x} y={ramY - 6} width="7" height="6" rx="1" />
+            <rect class="slot-latch-tab" x={x + 2} y={ramY - 4} width="3" height="2" />
+            <text class="silk" x={x + 3.5} y={ramY + slotLength + 5} text-anchor="middle">
+                {label}
+            </text>
+        </g>
+    ))}
+</g>
+
+<style>
+    .slot-body {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.4;
+    }
+
+    .slot-channel {
+        fill: var(--page-bg);
+    }
+
+    .slot-contacts {
+        stroke: var(--board-gold);
+        stroke-width: 2;
+        stroke-dasharray: 0.5 0.35;
+    }
+
+    .slot-key {
+        fill: var(--board-chip);
+    }
+
+    .slot-latch {
+        fill: var(--board-chip-outline);
+    }
+
+    .slot-latch-tab {
+        fill: var(--board-chip);
+    }
+
+    .silk {
+        fill: var(--board-silkscreen);
+        opacity: 0.55;
+        font-family: var(--font-board);
+        font-size: 2.6px;
+    }
+</style>
