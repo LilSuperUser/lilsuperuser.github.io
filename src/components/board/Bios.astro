@@ -1,0 +1,78 @@
+<g id="bios" transform="translate(100 146)">
+    <path class="plcc-silk" d="M0.5 -1.5H18.5V21.5H-1.5V0.5Z" />
+    <text class="silk" x="8.5" y="-3" text-anchor="middle">
+        BIOS
+    </text>
+
+    <path class="plcc-frame" d="M2 0H17V20H0V2Z" />
+    <rect class="plcc-pry" x="14.8" y="0.5" width="1.8" height="0.8" />
+    <rect class="plcc-pry" x="0.4" y="18.7" width="1.8" height="0.8" />
+
+    <line class="plcc-contacts-h" x1="4.44" y1="1.5" x2="12.56" y2="1.5" />
+    <line class="plcc-contacts-h" x1="4.44" y1="18.5" x2="12.56" y2="18.5" />
+    <line class="plcc-contacts-v" x1="1.4" y1="4.67" x2="1.4" y2="15.33" />
+    <line class="plcc-contacts-v" x1="15.6" y1="4.67" x2="15.6" y2="15.33" />
+
+    <path class="plcc-chip" d="M4 3H14.2V17H2.8V4.2Z" />
+    <circle class="plcc-dot" cx="8.5" cy="4.4" r="0.5" />
+    <text class="plcc-mark" x="8.5" y="8.6" text-anchor="middle">
+        LSU FLASH
+    </text>
+    <text class="plcc-mark" x="8.5" y="10.3" text-anchor="middle">
+        49LF080A
+    </text>
+    <text class="plcc-mark" x="8.5" y="12" text-anchor="middle">
+        2610 A1
+    </text>
+</g>
+
+<style>
+    .plcc-silk {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.35;
+        opacity: 0.5;
+    }
+
+    .plcc-frame {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .plcc-pry {
+        fill: var(--page-bg);
+    }
+
+    .plcc-contacts-h,
+    .plcc-contacts-v {
+        stroke: var(--board-gold);
+        stroke-dasharray: 0.5 0.77;
+    }
+
+    .plcc-contacts-h {
+        stroke-width: 1.8;
+    }
+
+    .plcc-contacts-v {
+        stroke-width: 1.6;
+    }
+
+    .plcc-chip {
+        fill: var(--board-package);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.3;
+    }
+
+    .plcc-dot {
+        fill: var(--board-silkscreen);
+        opacity: 0.7;
+    }
+
+    .plcc-mark {
+        fill: var(--board-silkscreen);
+        opacity: 0.5;
+        font-family: var(--font-board);
+        font-size: 1.5px;
+    }
+</style>
