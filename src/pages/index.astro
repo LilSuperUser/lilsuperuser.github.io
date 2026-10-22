@@ -1,4 +1,5 @@
 ---
+import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 
 const title = "LilSuperUser";
@@ -16,26 +17,33 @@ const description =
     </head>
     <body>
         <main>
-            <div>
-                <p class="status">POST_BOARD // PHASE_0</p>
+            <section class="board-zone">
+                <p class="status">POST_BOARD // PHASE_1</p>
                 <p class="message">
                     Board is powered. Components are still being placed...
                 </p>
-            </div>
+            </section>
+            <aside class="panel-zone" hidden></aside>
         </main>
+        <Footer />
     </body>
 </html>
 
 <style>
     main {
-        display: flex;
-        min-height: 100vh;
-        align-items: center;
-        justify-content: center;
+        height: calc(100vh - var(--footer-height));
         background: var(--board-surface);
         color: var(--board-silkscreen);
         font-family: var(--font-board);
         text-align: center;
+    }
+
+    .board-zone {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .status {
