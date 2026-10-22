@@ -11,15 +11,25 @@ const holes = [
 ];
 ---
 
-<svg
-    viewBox={`-1 -1 ${width + 2} ${height + 2}`}
-    role="img"
-    aria-label="Illustrated motherboard"
->
+<svg viewBox={`-1 -1 ${width + 2} ${height + 2}`} role="img" aria-label="Illustrated motherboard">
     <rect class="substrate" x="0" y="0" width={width} height={height} rx="4" />
     {holes.map(([x, y]) => (
         <circle class="hole" cx={x} cy={y} r="3.2" />
     ))}
+
+    <defs>
+        <pattern id="lga" width="1.4" height="1.4" patternUnits="userSpaceOnUse">
+            <circle class="lga-dot" cx="0.7" cy="0.7" r="0.3" />
+        </pattern>
+    </defs>
+
+    <g id="cpu">
+        <rect class="socket-frame" x="142" y="74" width="56" height="52" rx="2" />
+        <rect class="socket-lands" x="148" y="80" width="44" height="40" />
+        <rect class="socket-plate" x="146" y="78" width="48" height="44" rx="1" />
+        <path class="socket-pin1" d="M142 74 h7 l-7 7 z" />
+        <path class="socket-lever" d="M198 112 h10 v14 h-6" />
+    </g>
 </svg>
 
 <style>
@@ -38,5 +48,34 @@ const holes = [
         fill: var(--page-bg);
         stroke: var(--board-edge);
         stroke-width: 0.6;
+    }
+
+    .lga-dot,
+    .socket-pin1 {
+        fill: var(--board-gold);
+    }
+
+    .socket-frame {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .socket-lands {
+        fill: url(#lga);
+    }
+
+    .socket-plate {
+        fill: none;
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.8;
+    }
+
+    .socket-lever {
+        fill: none;
+        stroke: var(--board-chip-outline);
+        stroke-width: 1.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 </style>
