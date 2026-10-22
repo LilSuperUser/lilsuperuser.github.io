@@ -5,19 +5,26 @@ import { offsetPolyline, toPath, type Point } from "../../lib/board/router";
 // out the via column, jogs up at 45 degree, then into slot A1 pads.
 // NOTE: Each lane is this same line shifted sideways
 const centerline: Point[] = [
-    [210, 92],
+    [206, 92],
     [213, 92],
     [221, 84],
     [224, 84],
 ];
 
-const lanes = 8;
+// Where each lane leaves its via.
+const startX = [206.6, 208.8, 207.6, 209.0, 206.6, 207.8, 208.6, 207.6];
+
+const lanes = startX.length;
 const pitch = 2;
 
 // -7, -5, ... +7 so the bus stays centred on the original route
 const offsets = Array.from({ length: lanes }, (_, i) => (i - (lanes - 1) / 2) * pitch);
 
-const traces = offsets.map((o) => offsetPolyline(centerline, o));
+// Each lane is the shifted centerline with its start moved to its via
+const traces = offsets.map((o, i): Point[] => {
+    const lane = offsetPolyline(centerline, o);
+    return [[startX[i], lane[0][1]], ...lane.slice(1)];
+});
 
 // One path string per layer, so the whole bus is a handful of elements
 const copper = traces.map(toPath).join("");
