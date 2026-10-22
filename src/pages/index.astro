@@ -1,4 +1,5 @@
 ---
+import Board from "../components/Board.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 
@@ -18,10 +19,7 @@ const description =
     <body>
         <main>
             <section class="board-zone">
-                <p class="status">POST_BOARD // PHASE_1</p>
-                <p class="message">
-                    Board is powered. Components are still being placed...
-                </p>
+                <Board />
             </section>
             <aside class="panel-zone" hidden></aside>
         </main>
@@ -32,27 +30,19 @@ const description =
 <style>
     main {
         height: calc(100vh - var(--footer-height));
-        background: var(--board-surface);
+        background: var(--page-bg);
         color: var(--board-silkscreen);
         font-family: var(--font-board);
         text-align: center;
     }
 
     .board-zone {
-        display: flex;
         height: 100%;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .status {
-        font-size: 0.85rem;
-        letter-spacing: 0.08em;
-        opacity: 0.6;
-    }
-
-    .message {
-        font-size: 1.1rem;
+        padding: 1.5rem;
+        background-image: radial-gradient(
+            rgba(216, 212, 196, 0.07) 1px,
+            transparent 1px
+        );
+        background-size: 20px 20px;
     }
 </style>

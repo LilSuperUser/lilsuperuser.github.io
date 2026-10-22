@@ -1,0 +1,42 @@
+---
+const width = 460;
+const height = 210;
+
+// mounting hole centers in mm
+const holes = [
+    [8, 8],
+    [452, 8],
+    [8, 202],
+    [452, 202],
+];
+---
+
+<svg
+    viewBox={`-1 -1 ${width + 2} ${height + 2}`}
+    role="img"
+    aria-label="Illustrated motherboard"
+>
+    <rect class="substrate" x="0" y="0" width={width} height={height} rx="4" />
+    {holes.map(([x, y]) => (
+        <circle class="hole" cx={x} cy={y} r="3.2" />
+    ))}
+</svg>
+
+<style>
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    .substrate {
+        fill: var(--board-surface);
+        stroke: var(--board-edge);
+        stroke-width: 0.6;
+    }
+
+    .hole {
+        fill: var(--page-bg);
+        stroke: var(--board-edge);
+        stroke-width: 0.6;
+    }
+</style>
