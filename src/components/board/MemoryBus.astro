@@ -1,0 +1,87 @@
+---
+import { offsetPolyline, toPath, type Point } from "../../lib/board/router";
+
+// The bus is defined once, using a centerline:
+// out the via column, jogs up at 45 degree, then into slot A1 pads.
+// NOTE: Each lane is this same line shifted sideways
+const centerline: Point[] = [
+    [210, 92],
+    [213, 92],
+    [221, 84],
+    [224, 84],
+];
+
+const lanes = 8;
+const pitch = 2;
+
+// -7, -5, ... +7 so the bus stays centred on the original route
+const offsets = Array.from({ length: lanes }, (_, i) => (i - (lanes - 1) / 2) * pitch);
+
+const traces = offsets.map((o) => offsetPolyline(centerline, o));
+
+// One path string per layer, so the whole bus is a handful of elements
+const copper = traces.map(toPath).join("");
+
+// Use zero-length paths with round caps to draw the vias as circles
+const vias = traces.map((t) => `M${t[0][0]} ${t[0][1]}h0`).join("");
+
+// Short contact pad at the end of each lane
+const pads = traces
+    .map((t) => {
+        const [x, y] = t[t.length - 1];
+        return `M${x - 0.6} ${y}h1.6`;
+    })
+    .join("");
+---
+
+<g id="net-cpu-ram">
+    <path class="trace-edge" d={copper} />
+    <path class="trace-copper" d={copper} />
+    <path class="trace-sheen" d={copper} />
+    <path class="pad" d={pads} />
+    <path class="via" d={vias} />
+    <path class="via-drill" d={vias} />
+</g>
+
+<style>
+    path {
+        fill: none;
+    }
+
+    .trace-edge {
+        stroke: var(--board-trace-edge);
+        stroke-width: 0.8;
+    }
+
+    .trace-copper {
+        stroke: var(--board-trace);
+        stroke-width: 0.45;
+    }
+
+    .trace-sheen {
+        stroke: var(--board-gold);
+        stroke-width: 0.12;
+        opacity: 0.5;
+    }
+
+    .pad {
+        stroke: var(--board-gold);
+        stroke-width: 1.1;
+        opacity: 0.8;
+    }
+
+    .via,
+    .via-drill {
+        stroke-linecap: round;
+    }
+
+    .via {
+        stroke: var(--board-gold);
+        stroke-width: 1.4;
+    }
+
+    .via-drill {
+        stroke: var(--page-bg);
+        stroke-width: 0.5;
+    }
+</style>

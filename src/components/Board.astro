@@ -2,11 +2,12 @@
 import Cpu from "./board/Cpu.astro";
 import CpuDecoupling from "./board/CpuDecoupling.astro";
 import Ram from "./board/Ram.astro";
+import MemoryBus from "./board/MemoryBus.astro";
 
 const width = 460;
 const height = 210;
 
-// mounting hole centers in mm
+// Mounting hole centers in mm
 const holes = [
     [8, 8],
     [452, 8],
@@ -24,6 +25,7 @@ const holes = [
     <Cpu />
     <CpuDecoupling />
     <Ram />
+    <MemoryBus />
 </svg>
 
 <style>
