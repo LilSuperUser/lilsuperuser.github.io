@@ -66,3 +66,19 @@ body {
     font-family: var(--font-board);
     font-size: 2.6px;
 }
+
+/* Two-Terminal SMD parts (caps, resistors),
+ * built by lib/board/passives.ts */
+.cap-pad {
+    fill: var(--board-gold);
+    opacity: 0.45;
+}
+
+.cap-body {
+    fill: var(--board-mlcc);
+}
+
+.cap-end {
+    fill: var(--board-silkscreen);
+    opacity: 0.8;
+}
