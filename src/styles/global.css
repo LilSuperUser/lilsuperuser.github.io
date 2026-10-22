@@ -21,6 +21,21 @@ Two palettes (will) live side-by-side:
     --font-board:
         "JetBrains Mono", "Space Mono", ui-monospace, "SFMono-Regular", Menlo,
         monospace;
+    --font-interface: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    /* ---- Interface palette (light mode) ---- */
+    --surface-footer: #f4f2ec;
+    --text-footer: #2c2c2a;
+
+    /* ---- Layout ---- */
+    --footer-height: 66px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --surface-footer: #171712;
+        --text-footer: #e8e6dc;
+    }
 }
 
 *,
