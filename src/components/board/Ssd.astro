@@ -1,0 +1,164 @@
+---
+import { buildPassives, type Passive } from "../../lib/board/passives";
+
+// Every passive on the card, in card-local mm: 0402s (1.0 x 0.5 mm)
+const parts: Passive[] = [];
+const row = (xs: number[], y: number) => xs.forEach((x) => parts.push({ x, y, vertical: false }));
+const col = (x: number, ys: number[]) => ys.forEach((y) => parts.push({ x, y, vertical: true }));
+
+row([15, 17, 19, 21, 23], 4); // Above the controller
+row([15, 17, 19, 21, 23], 18); // Below it
+col(12, [8, 11, 14]); // Left of it
+col(27, [6.5, 15.5]); // Right of it
+row([31, 33, 35], 6); // Above the dram
+row([31, 33, 35], 16); // Below it
+col(39, [7, 11, 15]); // Between the dram and the first nand
+col(55.5, [5, 17]); // Between the two nand packages
+col(73, [7, 15]); // Right of the second nand
+row([74.5, 76.5], 4); // By the mounting screw
+row([74.5, 76.5], 18);
+
+const { pads, bodies, ends } = buildPassives(parts, 1.0, 0.5);
+
+// The two nand packages are identical, so one array draws both
+const nands = [41, 58];
+
+// silkscreen ticks where a shorter 2242 / 2260 card would end
+const sizes = [42, 60, 80];
+const ticks = sizes.map((s) => `M${s} 24v1.2`).join("");
+---
+
+<g id="storage" transform="translate(300 64)">
+    <path class="m2-silk" d="M-2 -2H85.5L86.5 -1V23L85.5 24H-2" />
+    <path class="m2-silk" d={ticks} />
+    {sizes.map((s) => (
+        <text class="m2-size" x={s} y="27.6" text-anchor="middle">
+            22{s}
+        </text>
+    ))}
+    <text class="silk" x="40" y="-4.2" text-anchor="middle">
+        M.2_1
+    </text>
+
+    <circle class="m2-ring" cx="80" cy="11" r="3.3" />
+    <circle class="m2-standoff" cx="80" cy="11" r="2.3" />
+
+    <path
+        class="ssd-pcb"
+        d="M0.6 0H79.4L80 0.6V8.3A2.7 2.7 0 0 0 80 13.7V21.4L79.4 22H0.6L0 21.4V0.6Z"
+    />
+
+    <path class="cap-pad" d={pads} />
+    <path class="cap-body" d={bodies} />
+    <path class="cap-end" d={ends} />
+
+    <rect class="ssd-chip" x="14" y="5.5" width="11" height="11" />
+    <circle class="ssd-dot" cx="15.2" cy="6.7" r="0.4" />
+    <text class="ssd-mark" x="19.5" y="9.6" text-anchor="middle">
+        LSU
+    </text>
+    <text class="ssd-mark" x="19.5" y="11.2" text-anchor="middle">
+        NVC-520
+    </text>
+    <text class="ssd-mark" x="19.5" y="12.8" text-anchor="middle">
+        2610
+    </text>
+
+    <rect class="ssd-chip" x="29" y="8" width="8" height="6" />
+    <text class="ssd-mark" x="33" y="11.3" text-anchor="middle">
+        DRAM
+    </text>
+
+    {nands.map((x) => (
+        <g>
+            <rect class="ssd-chip" x={x} y="2" width="12" height="18" />
+            <circle class="ssd-dot" cx={x + 1.2} cy="3.2" r="0.4" />
+            <text class="ssd-mark" x={x + 6} y="9.6" text-anchor="middle">
+                LSU NAND
+            </text>
+            <text class="ssd-mark" x={x + 6} y="11.2" text-anchor="middle">
+                512Gb
+            </text>
+            <text class="ssd-mark" x={x + 6} y="12.8" text-anchor="middle">
+                2610
+            </text>
+        </g>
+    ))}
+
+    <line class="m2-tails" x1="-2.6" y1="2.25" x2="-2.6" y2="19.75" />
+    <rect class="m2-housing" x="-2" y="-1.5" width="8.5" height="25" rx="0.6" />
+
+    <circle class="m2-screw" cx="80" cy="11" r="1.6" />
+    <path class="m2-screw-slot" d="M78.8 11h2.4M80 9.8v2.4" />
+</g>
+
+<style>
+    .m2-silk {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.35;
+        opacity: 0.5;
+    }
+
+    .m2-ring {
+        fill: var(--board-trace);
+    }
+
+    .m2-standoff {
+        fill: var(--board-gold);
+    }
+
+    .m2-size {
+        fill: var(--board-silkscreen);
+        opacity: 0.5;
+        font-family: var(--font-board);
+        font-size: 1.8px;
+    }
+
+    .ssd-pcb {
+        fill: var(--board-ssd);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.4;
+    }
+
+    .ssd-chip {
+        fill: var(--board-package);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.25;
+    }
+
+    .ssd-dot {
+        fill: var(--board-silkscreen);
+        opacity: 0.7;
+    }
+
+    .ssd-mark {
+        fill: var(--board-silkscreen);
+        opacity: 0.5;
+        font-family: var(--font-board);
+        font-size: 1.3px;
+    }
+
+    .m2-tails {
+        stroke: var(--board-gold);
+        stroke-width: 1.2;
+        stroke-dasharray: 0.5 0.5;
+    }
+
+    .m2-housing {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .m2-screw {
+        fill: var(--board-silkscreen);
+        opacity: 0.8;
+    }
+
+    .m2-screw-slot {
+        fill: none;
+        stroke: var(--page-bg);
+        stroke-width: 0.4;
+    }
+</style>
