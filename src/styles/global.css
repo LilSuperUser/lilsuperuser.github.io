@@ -21,6 +21,8 @@ Two palettes (will) live side-by-side:
     --board-trace-active: #e0994f;
     --board-steel: #6a6b66;
     --board-steel-dark: #4f504b;
+    --board-led-green: #4f9d63;
+    --board-led-amber: #d9a441;
     --board-hero-glow: #e0994f;
     --board-post-digit: #ff8c3c;
     --board-post-bg: #0a0a08;
@@ -68,6 +70,14 @@ body {
     opacity: 0.55;
     font-family: var(--font-board);
     font-size: 2.6px;
+}
+
+/* silkscreen outlines and tick marks: one shared, deliberately quiet look */
+.silk-outline {
+    fill: none;
+    stroke: var(--board-silkscreen);
+    stroke-width: 0.3;
+    opacity: 0.28;
 }
 
 /* Two-Terminal SMD parts (caps, resistors),

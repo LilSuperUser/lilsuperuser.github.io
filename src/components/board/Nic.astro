@@ -1,0 +1,156 @@
+---
+import { buildPassives, type Passive } from "../../lib/board/passives";
+import ConnectorShell from "./ConnectorShell.astro";
+
+// Decoupling and crystal load caps, in local mm: 0402s (1.0 x 0.5 mm)
+const parts: Passive[] = [];
+const row = (xs: number[], y: number) => xs.forEach((x) => parts.push({ x, y, vertical: false }));
+const col = (x: number, ys: number[]) => ys.forEach((y) => parts.push({ x, y, vertical: true }));
+
+row([43.5, 45.5, 47.5], 2); // Above the phy
+row([43.5, 45.5, 47.5], 14); // Below it
+col(39, [5.5, 8, 10.5]); // Between the magnetics and the phy
+row([52.6, 54.6], 5.2); // Crystal load caps
+row([52.6, 54.6], 11.8);
+
+const { pads, bodies, ends } = buildPassives(parts, 1.0, 0.5);
+
+const leds = [
+    { y: 4.5, cls: "nic-led-green", label: "LINK" },
+    { y: 11.5, cls: "nic-led-amber", label: "ACT" },
+];
+---
+
+<g id="nic" transform="translate(-0.8 40)">
+    <path class="silk-outline" d="M0.8 -3H22.5L23.5 -2V18L22.5 19H0.8" />
+    <text class="silk" x="10.5" y="-4.7" text-anchor="middle">
+        LAN
+    </text>
+
+    <path class="cap-pad" d={pads} />
+    <path class="cap-body" d={bodies} />
+    <path class="cap-end" d={ends} />
+
+    <line class="mag-pads" x1="25" y1="3.305" x2="25" y2="12.695" />
+    <line class="mag-pads" x1="35.5" y1="3.305" x2="35.5" y2="12.695" />
+    <path class="nic-chip" d="M27 2H34.5V14H26V3Z" />
+    <circle class="nic-dot" cx="27.4" cy="3.4" r="0.4" />
+    <text class="nic-mark" x="30.25" y="7.6" text-anchor="middle">
+        LSU
+    </text>
+    <text class="nic-mark" x="30.25" y="9.1" text-anchor="middle">
+        1G-MAG
+    </text>
+    <text class="nic-mark" x="30.25" y="10.6" text-anchor="middle">
+        2610
+    </text>
+
+    <line class="qfn-pads" x1="43.125" y1="4.3" x2="47.875" y2="4.3" />
+    <line class="qfn-pads" x1="43.125" y1="11.7" x2="47.875" y2="11.7" />
+    <line class="qfn-pads" x1="41.8" y1="5.625" x2="41.8" y2="10.375" />
+    <line class="qfn-pads" x1="49.2" y1="5.625" x2="49.2" y2="10.375" />
+    <rect class="nic-chip" x="42" y="4.5" width="7" height="7" />
+    <circle class="nic-dot" cx="43.1" cy="5.6" r="0.35" />
+    <text class="nic-mark" x="45.5" y="7.9" text-anchor="middle">
+        LSU
+    </text>
+    <text class="nic-mark" x="45.5" y="9.3" text-anchor="middle">
+        GBE-PHY
+    </text>
+
+    <rect class="xtal-pad" x="51.6" y="7.3" width="1.2" height="1.9" />
+    <rect class="xtal-pad" x="54.4" y="7.3" width="1.2" height="1.9" />
+    <rect class="xtal-body" x="52" y="7" width="3.2" height="2.5" />
+
+    {leds.map(({ y, cls, label }) => (
+        <g>
+            <rect class="cap-pad" x="56.95" y={y - 0.55} width="2.1" height="1.1" />
+            <rect class={cls} x="57.2" y={y - 0.4} width="1.6" height="0.8" />
+            <text class="nic-label" x="60.2" y={y + 0.55}>
+                {label}
+            </text>
+        </g>
+    ))}
+
+    <ConnectorShell depth={21} width={16} rim={3} emboss={false}>
+        <rect class="rj-window" x="12.2" y="3.4" width="3.4" height="2" />
+        <rect class="rj-window" x="12.2" y="10.6" width="3.4" height="2" />
+        <path class="rj-rib" d="M2.5 5.5H10M2.5 10.5H10" />
+        <rect class="rj-finger" x="7.5" y="-0.6" width="3.5" height="0.6" />
+        <rect class="rj-finger" x="7.5" y="16" width="3.5" height="0.6" />
+    </ConnectorShell>
+</g>
+
+<style>
+    .rj-window {
+        fill: var(--page-bg);
+    }
+
+    .rj-rib {
+        fill: none;
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.35;
+    }
+
+    .rj-finger {
+        fill: var(--board-steel);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.2;
+    }
+
+    .mag-pads {
+        stroke: var(--board-gold);
+        stroke-width: 1.6;
+        stroke-dasharray: 0.5 0.77;
+    }
+
+    .qfn-pads {
+        stroke: var(--board-gold);
+        stroke-width: 0.7;
+        stroke-dasharray: 0.25 0.25;
+    }
+
+    .nic-label {
+        fill: var(--board-silkscreen);
+        opacity: 0.55;
+        font-family: var(--font-board);
+        font-size: 1.6px;
+    }
+
+    .nic-chip {
+        fill: var(--board-package);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.25;
+    }
+
+    .nic-dot {
+        fill: var(--board-silkscreen);
+        opacity: 0.7;
+    }
+
+    .nic-mark {
+        fill: var(--board-silkscreen);
+        opacity: 0.5;
+        font-family: var(--font-board);
+        font-size: 1.3px;
+    }
+
+    .xtal-pad {
+        fill: var(--board-gold);
+        opacity: 0.6;
+    }
+
+    .xtal-body {
+        fill: var(--board-steel);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.2;
+    }
+
+    .nic-led-green {
+        fill: var(--board-led-green);
+    }
+
+    .nic-led-amber {
+        fill: var(--board-led-amber);
+    }
+</style>

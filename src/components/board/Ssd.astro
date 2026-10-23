@@ -29,8 +29,8 @@ const ticks = sizes.map((s) => `M${s} 24v1.2`).join("");
 ---
 
 <g id="storage" transform="translate(300 64)">
-    <path class="m2-silk" d="M-2 -2H85.5L86.5 -1V23L85.5 24H-2" />
-    <path class="m2-silk" d={ticks} />
+    <path class="silk-outline" d="M-2 -2H85.5L86.5 -1V23L85.5 24H-2" />
+    <path class="silk-outline" d={ticks} />
     {sizes.map((s) => (
         <text class="m2-size" x={s} y="27.6" text-anchor="middle">
             22{s}
