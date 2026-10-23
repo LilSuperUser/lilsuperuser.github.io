@@ -1,0 +1,106 @@
+<g id="usb" transform="translate(-0.8 40)">
+    <path class="usb-silk" d="M0.8 -3H18.3L19.3 -2V16.4L18.3 17.4H0.8" />
+    <text class="silk" x="10" y="-4.7" text-anchor="middle">
+        USB
+    </text>
+
+    <g class="usb-trident" transform="translate(13.5 21.5) scale(-1 1)">
+        <path class="usb-trident-line" d="M0 0H8M3 0L4.4 -1.8H6.2M5 0L6.2 1.8" />
+        <path
+            class="usb-trident-shape"
+            d="M-0.8 0a0.8 0.8 0 1 0 1.6 0a0.8 0.8 0 1 0 -1.6 0zM8 -0.9L9.8 0L8 0.9zM6.2 -1.8a0.6 0.6 0 1 0 1.2 0a0.6 0.6 0 1 0 -1.2 0zM6.2 1.2h1.2v1.2h-1.2z"
+        />
+    </g>
+
+    <path class="usb-pad" d="M4 -1.4h0M13 -1.4h0M4 15.9h0M13 15.9h0" />
+    <path class="usb-drill" d="M4 -1.4h0M13 -1.4h0M4 15.9h0M13 15.9h0" />
+
+    <rect class="usb-shell" x="0" y="0" width="17.5" height="14.5" rx="0.5" />
+    <path class="usb-sheen-hi" d="M1.2 1.2H15.8" />
+    <path class="usb-sheen-lo" d="M1.2 13.3H15.8" />
+    <rect class="usb-emboss" x="6" y="3" width="8" height="8.5" rx="0.6" />
+    <rect class="usb-dimple" x="1.6" y="3" width="2.6" height="1" rx="0.5" />
+    <rect class="usb-dimple" x="1.6" y="10.5" width="2.6" height="1" rx="0.5" />
+    <path class="usb-seam" d="M15.8 0.5V14" />
+    <rect class="usb-lip" x="0" y="0" width="0.8" height="14.5" rx="0.4" />
+    <rect class="usb-rim" x="16.5" y="0" width="1" height="14.5" rx="0.3" />
+</g>
+
+<style>
+    .usb-silk {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.35;
+        opacity: 0.5;
+    }
+
+    .usb-trident {
+        opacity: 0.5;
+    }
+
+    .usb-trident-line {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.35;
+        stroke-linecap: round;
+    }
+
+    .usb-trident-shape {
+        fill: var(--board-silkscreen);
+    }
+
+    .usb-pad {
+        stroke: var(--board-gold);
+        stroke-width: 1.8;
+        stroke-linecap: round;
+    }
+
+    .usb-drill {
+        stroke: var(--page-bg);
+        stroke-width: 0.7;
+        stroke-linecap: round;
+    }
+
+    .usb-shell {
+        fill: var(--board-steel);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.4;
+    }
+
+    .usb-sheen-hi {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.3;
+        opacity: 0.35;
+    }
+
+    .usb-sheen-lo {
+        fill: none;
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.3;
+    }
+
+    .usb-emboss {
+        fill: none;
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.35;
+    }
+
+    .usb-dimple {
+        fill: var(--board-steel-dark);
+    }
+
+    .usb-seam {
+        fill: none;
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.3;
+    }
+
+    .usb-lip {
+        fill: var(--board-steel-dark);
+    }
+
+    .usb-rim {
+        fill: var(--board-chip);
+    }
+</style>
