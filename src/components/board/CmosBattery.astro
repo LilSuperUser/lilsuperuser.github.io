@@ -1,0 +1,112 @@
+<g id="cmos" transform="translate(180 160) scale(0.85)">
+    <text class="silk" x="0" y="-14.2" text-anchor="middle">
+        CMOS
+    </text>
+
+    <path class="bat-pad" d="M16 -3.2h0M16 3.2h0M0 13.9h0" />
+    <path class="bat-drill" d="M16 -3.2h0M16 3.2h0M0 13.9h0" />
+    <text class="bat-plus" x="16" y="0.9" text-anchor="middle">
+        +
+    </text>
+
+    <path class="bat-base" d="M10.47 -5H14V5H10.47A11.6 11.6 0 1 1 10.47 -5Z" />
+    <circle class="bat-notch" cx="-11.6" cy="0" r="3" />
+    <circle class="bat-well" r="10.4" />
+
+    <g id="cmos-cell">
+        <circle class="bat-cell" r="10" />
+        <circle class="bat-top" r="8.3" />
+        <path class="bat-gloss" d="M-5.9 -4.9A7.7 7.7 0 0 1 1.4 -7.6" />
+        <text class="bat-mark" x="0" y="-3.6" text-anchor="middle" font-size="3.4">
+            +
+        </text>
+        <text class="bat-mark" x="0" y="1.4" text-anchor="middle" font-size="2.4">
+            CR2032
+        </text>
+        <text class="bat-mark" x="0" y="4.4" text-anchor="middle" font-size="1.2">
+            3V LITHIUM
+        </text>
+    </g>
+
+    <rect class="bat-clip-shadow" x="5.6" y="-1.2" width="8.3" height="3.4" rx="1.2" />
+    <rect class="bat-clip" x="5.2" y="-1.7" width="8.3" height="3.4" rx="1.2" />
+    <path class="bat-clip-sheen" d="M6.6 -0.6H12" />
+</g>
+
+<style>
+    .bat-pad {
+        stroke: var(--board-gold);
+        stroke-width: 2.2;
+        stroke-linecap: round;
+    }
+
+    .bat-drill {
+        stroke: var(--page-bg);
+        stroke-width: 0.9;
+        stroke-linecap: round;
+    }
+
+    .bat-plus {
+        fill: var(--board-silkscreen);
+        opacity: 0.55;
+        font-family: var(--font-board);
+        font-size: 2.4px;
+    }
+
+    .bat-base {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .bat-notch {
+        fill: var(--board-surface);
+    }
+
+    .bat-well {
+        fill: var(--page-bg);
+    }
+
+    .bat-cell {
+        fill: var(--board-steel);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.4;
+    }
+
+    .bat-top {
+        fill: var(--board-tin);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.3;
+    }
+
+    .bat-gloss {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.6;
+        stroke-linecap: round;
+        opacity: 0.45;
+    }
+
+    .bat-mark {
+        fill: var(--board-chip);
+        font-family: var(--font-board);
+    }
+
+    .bat-clip-shadow {
+        fill: #000;
+        opacity: 0.35;
+    }
+
+    .bat-clip {
+        fill: var(--board-tin);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.4;
+    }
+
+    .bat-clip-sheen {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.3;
+        opacity: 0.6;
+    }
+</style>
