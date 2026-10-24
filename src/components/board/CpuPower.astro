@@ -1,0 +1,46 @@
+---
+// 2 rows of 4 cavities at 4.2 mm pitch
+const cavities = [3.0, 7.2].flatMap((cy) => [2.9, 7.1, 11.3, 15.5].map((cx) => ({ cx, cy })));
+
+// Each cavity is a 3.4 mm square with one corner chamfered
+const hole = (cx: number, cy: number) =>
+    `M${cx - 1.7} ${cy - 1.7}H${cx + 1.7}V${cy + 0.5}L${cx + 0.5} ${cy + 1.7}H${cx - 1.7}Z`;
+---
+
+<g id="cpu-power" transform="translate(100 8)">
+    <path class="silk-outline" d="M0 -2.6H19.6V11.4H-1.2V-1.4Z" />
+    <text class="silk" x="9.2" y="14.8" text-anchor="middle">
+        CPU PWR
+    </text>
+
+    <rect class="eps-latch" x="5.2" y="-1.2" width="8" height="1.4" rx="0.4" />
+    <path class="eps-body" d="M1 0H18.4V10.2H0V1Z" />
+    {cavities.map(({ cx, cy }) => (
+        <g>
+            <path class="eps-hole" d={hole(cx, cy)} />
+            <rect class="eps-pin" x={cx - 0.7} y={cy - 0.7} width="1.4" height="1.4" />
+        </g>
+    ))}
+</g>
+
+<style>
+    .eps-latch {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.4;
+    }
+
+    .eps-body {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .eps-hole {
+        fill: var(--page-bg);
+    }
+
+    .eps-pin {
+        fill: var(--board-gold);
+    }
+</style>
