@@ -1,0 +1,157 @@
+---
+import { round } from "../../lib/board/router";
+
+// The code on the display.
+// TODO: Boot animation will change this one value
+const code = "A0";
+
+// A digit is 6x10 mm made of seven segments, each a flat hexagon
+// (a bar with pointed ends and th is the bar thickness)
+const W = 6;
+const H = 10;
+const th = 0.8;
+
+const bar = (cx: number, cy: number, len: number, horizontal: boolean) => {
+    const a = len / 2;
+    const b = th / 2;
+    const pts = horizontal
+        ? [
+              [-a, 0],
+              [-a + b, -b],
+              [a - b, -b],
+              [a, 0],
+              [a - b, b],
+              [-a + b, b],
+          ]
+        : [
+              [0, -a],
+              [b, -a + b],
+              [b, a - b],
+              [0, a],
+              [-b, a - b],
+              [-b, -a + b],
+          ];
+    return (
+        pts.map(([x, y], i) => `${i === 0 ? "M" : "L"}${round(cx + x)} ${round(cy + y)}`).join("") +
+        "Z"
+    );
+};
+
+const lenH = W - th - 0.2;
+const lenV = H / 2 - th / 2 - 0.2;
+const upper = (th / 2 + H / 2) / 2; // Centre line of the upper vertical segments
+
+// Standard 7-segment naming: a is the top bar, then b, c, d, e, f clockwise
+// From the top right, and g the middle bar
+const seg: Record<string, string> = {
+    a: bar(W / 2, th / 2, lenH, true),
+    b: bar(W - th / 2, upper, lenV, false),
+    c: bar(W - th / 2, H - upper, lenV, false),
+    d: bar(W / 2, H - th / 2, lenH, true),
+    e: bar(th / 2, H - upper, lenV, false),
+    f: bar(th / 2, upper, lenV, false),
+    g: bar(W / 2, H / 2, lenH, true),
+};
+
+// Which segments are lit for each hex digit
+const glyphs: Record<string, string> = {
+    "0": "abcdef",
+    "1": "bc",
+    "2": "abdeg",
+    "3": "abcdg",
+    "4": "bcfg",
+    "5": "acdfg",
+    "6": "acdefg",
+    "7": "abc",
+    "8": "abcdefg",
+    "9": "abcdfg",
+    A: "abcefg",
+    B: "cdefg",
+    C: "adef",
+    D: "bcdeg",
+    E: "adefg",
+    F: "aefg",
+};
+
+const digits = [...code].map((ch, i) => ({
+    x: 4.2 + i * 8.2,
+    lit: glyphs[ch.toUpperCase()] ?? "",
+}));
+---
+
+<g id="qcode" transform="translate(378 170)">
+    <path class="silk-outline" d="M0 -1.2H31.4V17.7H-1.2V0Z" />
+    <text class="silk" x="10.5" y="-2.6" text-anchor="middle">
+        POST
+    </text>
+
+    <line class="q-pads" x1="23.7" y1="3.555" x2="23.7" y2="12.945" />
+    <line class="q-pads" x1="29.2" y1="3.555" x2="29.2" y2="12.945" />
+    <rect class="q-ic" x="24.5" y="3.3" width="3.9" height="9.9" />
+    <circle class="q-dot" cx="25.2" cy="4.3" r="0.35" />
+
+    <rect class="q-body" x="0" y="0" width="21" height="16.5" rx="1" />
+    <rect class="q-lens" x="1.8" y="1.8" width="17.4" height="12.9" />
+
+    <g transform="skewX(-5)">
+        {digits.map(({ x, lit }, i) => (
+            <g class="q-digit" data-digit={i} transform={`translate(${x} 3.25)`}>
+                {Object.entries(seg).map(([id, d]) => (
+                    <path class={lit.includes(id) ? "seg seg-on" : "seg"} data-seg={id} d={d} />
+                ))}
+            </g>
+        ))}
+    </g>
+
+    <path class="q-glare" d="M3 14.7L10 1.8H13L6 14.7Z" />
+</g>
+
+<style>
+    .q-pads {
+        stroke: var(--board-gold);
+        stroke-width: 1.2;
+        stroke-dasharray: 0.5 0.77;
+    }
+
+    .q-ic {
+        fill: var(--board-package);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.25;
+    }
+
+    .q-dot {
+        fill: var(--board-silkscreen);
+        opacity: 0.7;
+    }
+
+    .q-body {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .q-lens {
+        fill: var(--page-bg);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.3;
+    }
+
+    .seg {
+        fill: var(--board-trace-active);
+        fill-opacity: 0.08;
+    }
+
+    .seg-on {
+        fill-opacity: 1;
+        stroke: var(--board-trace-active);
+        stroke-opacity: 0.25;
+        stroke-width: 1.2;
+        stroke-linejoin: round;
+        paint-order: stroke;
+    }
+
+    .q-glare {
+        fill: var(--board-silkscreen);
+        opacity: 0.05;
+    }
+</style>
