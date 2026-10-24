@@ -1,0 +1,40 @@
+---
+import Choke from "./Choke.astro";
+import DrMos from "./DrMos.astro";
+import Electrolytic from "./Electrolytic.astro";
+
+// Along the top of the cpu: 8 phases, one drmos and one choke each
+const topPhases = Array.from({ length: 8 }, (_, k) => 144.25 + k * 8.5);
+
+// Down its left side: 5 phases, with the chokes turned 90 degrees
+const leftPhases = Array.from({ length: 5 }, (_, k) => 83 + k * 8.5);
+
+// Bulk caps behind the chokes
+const topCaps = [146, 157, 168, 179, 190];
+const leftCaps = [88, 100, 112];
+---
+
+<g id="vrm">
+    <text class="silk" x="168" y="30" text-anchor="middle">
+        VCORE
+    </text>
+
+    {topPhases.map((x) => (
+        <>
+            <DrMos x={x} y={63.5} />
+            <Choke x={x} y={53.5} />
+        </>
+    ))}
+    {leftPhases.map((y) => (
+        <>
+            <DrMos x={130} y={y} />
+            <Choke x={120.5} y={y} rotate={90} />
+        </>
+    ))}
+    {topCaps.map((x, i) => (
+        <Electrolytic x={x} y={40} variant={i % 2 === 0 ? "smd" : "radial"} />
+    ))}
+    {leftCaps.map((y, i) => (
+        <Electrolytic x={106} y={y} variant={i % 2 === 0 ? "radial" : "smd"} />
+    ))}
+</g>

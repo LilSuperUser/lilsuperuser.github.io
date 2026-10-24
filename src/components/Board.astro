@@ -11,6 +11,7 @@ import DebugHeader from "./board/DebugHeader.astro";
 import CmosBattery from "./board/CmosBattery.astro";
 import QCode from "./board/QCode.astro";
 import CpuPower from "./board/CpuPower.astro";
+import Vrm from "./board/Vrm.astro";
 
 const width = 460;
 const height = 210;
@@ -32,6 +33,7 @@ const holes = [
 
     <Cpu />
     <CpuDecoupling />
+    <Vrm />
     <CpuPower />
     <Ram />
     <MemoryBus />

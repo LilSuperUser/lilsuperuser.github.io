@@ -1,0 +1,116 @@
+---
+import { round } from "../../lib/board/router";
+
+interface Props {
+    x: number;
+    y: number;
+    variant: "smd" | "radial";
+    r?: number;
+}
+
+const { x, y, variant, r = 4 } = Astro.props;
+
+// SMD: a square base plate a little bigger than the can, with the two
+// corners on the positive (right) side chamfered
+const h = r + 0.5;
+const c = 1.6;
+const base = `M${-h} ${-h}H${h - c}L${h} ${-h + c}V${h - c}L${h - c} ${h}H${-h}Z`;
+
+// SMD: the black half marks the negative side (left)
+const ri = r - 0.35;
+const half = `M0 ${-ri}A${ri} ${ri} 0 0 0 0 ${ri}Z`;
+
+// SMD: a gloss arc on the silver half
+const g = round(ri * 0.8);
+const gloss = `M${round(g * 0.174)} ${round(-g * 0.985)}A${g} ${g} 0 0 1 ${round(g * 0.94)} ${round(-g * 0.342)}`;
+
+// Radial: the top plate, with the vent scored as three lines meeting at the centre
+const rt = round(r - 0.45);
+const L = rt * 0.72;
+const vent = `M0 0V${round(-L)}M0 0L${round(L * 0.866)} ${round(L * 0.5)}M0 0L${round(-L * 0.866)} ${round(L * 0.5)}`;
+
+// Radial: a dark polarity stripe along the rim on the negative side
+const rs = round(r - 0.25);
+const sx = round(rs * 0.819);
+const sy = round(rs * 0.574);
+const stripe = `M${-sx} ${-sy}A${rs} ${rs} 0 0 0 ${-sx} ${sy}`;
+---
+
+<g transform={`translate(${x} ${y})`}>
+    {variant === "smd" ? (
+        <>
+            <rect class="ecap-pad" x={-h - 0.8} y="-2.2" width="1.8" height="4.4" />
+            <rect class="ecap-pad" x={h - 1} y="-2.2" width="1.8" height="4.4" />
+            <path class="ecap-base" d={base} />
+            <circle class="ecap-top" r={r} />
+            <path class="ecap-half" d={half} />
+            <path class="ecap-gloss" d={gloss} />
+            <text class="ecap-text" x={round(r * 0.45)} y="0.5" text-anchor="middle">
+                16V
+            </text>
+        </>
+    ) : (
+        <>
+            <circle class="ecap-lip" r={r} />
+            <circle class="ecap-top" r={rt} />
+            <path class="ecap-vent" d={vent} />
+            <path class="ecap-stripe" d={stripe} />
+        </>
+    )}
+</g>
+
+<style>
+    .ecap-pad {
+        fill: var(--board-gold);
+        opacity: 0.8;
+    }
+
+    .ecap-base {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.3;
+    }
+
+    .ecap-top {
+        fill: var(--board-tin);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.3;
+    }
+
+    .ecap-half {
+        fill: var(--page-bg);
+    }
+
+    .ecap-gloss {
+        fill: none;
+        stroke: var(--board-silkscreen);
+        stroke-width: 0.5;
+        stroke-linecap: round;
+        opacity: 0.45;
+    }
+
+    .ecap-text {
+        fill: var(--board-chip);
+        font-family: var(--font-board);
+        font-size: 1.3px;
+    }
+
+    .ecap-lip {
+        fill: var(--board-steel);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.3;
+    }
+
+    .ecap-vent {
+        fill: none;
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.45;
+        stroke-linecap: round;
+    }
+
+    .ecap-stripe {
+        fill: none;
+        stroke: var(--page-bg);
+        stroke-width: 0.7;
+    }
+</style>

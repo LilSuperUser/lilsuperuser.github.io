@@ -1,0 +1,37 @@
+---
+interface Props {
+    x: number;
+    y: number;
+    rotate?: number;
+}
+
+const { x, y, rotate = 0 } = Astro.props;
+---
+
+<g transform={`translate(${x} ${y}) rotate(${rotate})`}>
+    <rect class="choke-tab" x="-3.9" y="-2.6" width="7.8" height="5.2" />
+    <rect class="choke-body" x="-3.3" y="-3.3" width="6.6" height="6.6" rx="0.5" />
+    <text class="choke-mark" y="0.5" text-anchor="middle" transform={`rotate(${-rotate})`}>
+        R22
+    </text>
+</g>
+
+<style>
+    .choke-tab {
+        fill: var(--board-tin);
+        opacity: 0.7;
+    }
+
+    .choke-body {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.12;
+    }
+
+    .choke-mark {
+        fill: var(--board-silkscreen);
+        opacity: 0.35;
+        font-family: var(--font-board);
+        font-size: 1.4px;
+    }
+</style>
