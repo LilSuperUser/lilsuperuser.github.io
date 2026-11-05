@@ -1,0 +1,16 @@
+---
+import PcieSlot from "./PcieSlot.astro";
+
+// x16, x1, x16 from the top
+const slots = [
+    { y: 104, lanes: 16 as const, label: "PCIEX16_1" },
+    { y: 124.32, lanes: 1 as const, label: "PCIEX1_1" },
+    { y: 144.64, lanes: 16 as const, label: "PCIEX16_2" },
+];
+---
+
+<g id="pcie">
+    {slots.map((slot) => (
+        <PcieSlot x={280} {...slot} />
+    ))}
+</g>
