@@ -15,6 +15,9 @@ Two palettes (will) live side-by-side:
     --board-mlcc: #6b4f32;
     --board-package: #34322a;
     --board-ssd: #1c2b2e;
+    --board-pcie: #3c6797;
+    --board-pcie-light: #5584b4;
+    --board-pcie-dark: #284869;
     --board-trace: #8a6535;
     --board-trace-edge: #2b2820;
     /* --board-trace-rest: #8a5a2e; */

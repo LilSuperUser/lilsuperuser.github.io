@@ -1,0 +1,197 @@
+---
+interface Props {
+    x: number;
+    y: number;
+    lanes: 1 | 16;
+    label: string;
+}
+
+const { x, y, lanes, label } = Astro.props;
+
+// Approx connector dimensions in mm
+const L = lanes === 16 ? 89 : 25;
+const H = 11.5;
+
+// Chamfered housing outline.
+const body = `M1 0H${L - 1}L${L} 1V${H - 1}L${L - 1} ${H}H1L0 ${H - 1}V1Z`;
+
+// Reinforcement ribs along both long edges.
+// Both rows share the same dimensions and mirror each other vertically.
+const pitch = 2.8;
+const ribWidth = 0.8;
+const ribLength = 2.25;
+const ribInset = 0.65;
+
+const count = Math.floor((L - 6 + (pitch - ribWidth)) / pitch);
+const first = (L - (count * pitch - (pitch - ribWidth))) / 2;
+
+const bottomRibY = H - ribInset - ribLength;
+
+const ribs = Array.from({ length: count }, (_, k) => {
+    const rx = first + k * pitch;
+    return `
+        M${rx} ${ribInset}
+        h${ribWidth}v${ribLength}h-${ribWidth}Z
+
+        M${rx} ${bottomRibY}
+        h${ribWidth}v${ribLength}h-${ribWidth}Z
+    `;
+}).join("");
+
+// Narrow backing strips behind the ribs.
+// (their width is derived from the outermost ribs, not full slot length)
+const backingPaddingX = 0.65;
+const backingX = first - backingPaddingX;
+const backingWidth = (count - 1) * pitch + ribWidth + backingPaddingX * 2;
+
+// Mirror the backing strips vertically, keeping a small margin around each rib row.
+const backingHeight = ribLength + 0.4;
+const topBackingY = ribInset - 0.2;
+
+const backingY = [topBackingY, H - topBackingY - backingHeight];
+
+// Two contact channels separated by the central key notch.
+const slitHeight = 1.2;
+const slitY = [3.65, H - 3.65 - slitHeight];
+
+// Contact dashes are split into two sections to leave room for the key.
+const sections = [
+    [2.5, 10.85],
+    [12.45, L - 3.5],
+];
+
+// Short dashed contact traces centred vertically within each channel.
+const contacts = slitY
+    .flatMap((sy) => {
+        const cy = sy + slitHeight / 2;
+
+        return sections.map(([a, b]) => `M${a} ${cy}H${b}`);
+    })
+    .join("");
+
+// Four mounting holes, inset from the housing corners.
+const holePoints = [1.9, L - 1.9].flatMap((cx) =>
+    [0.75, H - 0.75].map((cy) => ({
+        cx,
+        cy,
+    })),
+);
+
+// Solder tails along the top and bottom edges.
+// A dotted stroke produces one contact point per mm, positioned 0.5 mm from each edge.
+const tails = [-0.5, H + 0.5].map((cy) => `M2.5 ${cy}H${L - 3.5}`).join("");
+---
+
+<g transform={`translate(${x} ${y})`}>
+    <text class="silk" x={L / 2} y="-2.6" text-anchor="middle">
+        {label}
+    </text>
+
+    <path class="pcie-tails" d={tails} />
+
+    {lanes === 16 && (
+        <>
+            <path class="pcie-ext" d={`M${L - 1} 2.8H${L + 2.5}V8.7H${L - 1}Z`} />
+            <path
+                class="pcie-latch"
+                d={`M${L + 1.5} 2H${L + 6}Q${L + 7.5} 2 ${L + 7.5} 3.5V8Q${L + 7.5} 9.5 ${L + 6} 9.5H${L + 1.5}Z`}
+            />
+            <path class="pcie-groove" d={`M${L + 3.2} 4.5H${L + 6.4}M${L + 3.2} 7H${L + 6.4}`} />
+        </>
+    )}
+
+    <path class="pcie-body" d={body} />
+
+    {backingY.map((by) => (
+        <rect class="pcie-wall" x={backingX} y={by} width={backingWidth} height={backingHeight} />
+    ))}
+
+    {slitY.map((sy) => (
+        <rect class="pcie-slit" x="1.4" y={sy} width={L - 2.8} height={slitHeight} />
+    ))}
+
+    <path class="pcie-contacts" d={contacts} />
+
+    <rect
+        class="pcie-key"
+        x="11.05"
+        y={slitY[0]}
+        width="1.4"
+        height={slitY[1] + slitHeight - slitY[0]}
+    />
+
+    <path class="pcie-ribs" d={ribs} />
+
+    {holePoints.map(({ cx, cy }) => (
+        <>
+            <circle class="pcie-hole-rim" cx={cx} cy={cy} r="0.48" />
+            <circle class="pcie-hole" cx={cx} cy={cy} r="0.32" />
+        </>
+    ))}
+</g>
+
+<style>
+    .pcie-tails {
+        fill: none;
+        stroke: var(--board-tin);
+        stroke-width: 0.45;
+        stroke-linecap: round;
+        stroke-dasharray: 0.01 0.99;
+        opacity: 0.6;
+    }
+
+    .pcie-body {
+        fill: var(--board-pcie);
+        stroke: var(--board-pcie-dark);
+        stroke-width: 0.4;
+    }
+
+    .pcie-ext {
+        fill: var(--board-pcie);
+    }
+
+    .pcie-wall {
+        fill: var(--board-pcie-dark);
+    }
+
+    .pcie-slit {
+        fill: var(--page-bg);
+    }
+
+    .pcie-contacts {
+        fill: none;
+        stroke: var(--board-tin);
+        stroke-width: 0.4;
+        stroke-dasharray: 0.5 0.5;
+        opacity: 0.3;
+    }
+
+    .pcie-key {
+        fill: var(--board-pcie-light);
+    }
+
+    .pcie-ribs {
+        fill: var(--board-pcie-light);
+    }
+
+    .pcie-hole-rim {
+        fill: var(--board-pcie-dark);
+    }
+
+    .pcie-hole {
+        fill: var(--page-bg);
+    }
+
+    .pcie-latch {
+        fill: var(--board-pcie);
+        stroke: var(--board-pcie-dark);
+        stroke-width: 0.4;
+    }
+
+    .pcie-groove {
+        fill: none;
+        stroke: var(--board-pcie-dark);
+        stroke-width: 0.4;
+        stroke-linecap: round;
+    }
+</style>
