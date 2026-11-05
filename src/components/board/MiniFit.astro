@@ -1,0 +1,53 @@
+---
+import { round } from "../../lib/board/router";
+
+// A mini-fit jr style power connector (drawn horizontally from the origin) housing:
+// 2 rows of `cols` cavities at 4.2 mm pitch with a locking latch on the top edge
+interface Props {
+    cols: number;
+}
+
+const { cols } = Astro.props;
+
+const width = round(1.6 + 4.2 * cols);
+const latchX = round((width - 8) / 2);
+
+const cavities = [3.0, 7.2].flatMap((cy) =>
+    Array.from({ length: cols }, (_, k) => ({ cx: round(2.9 + k * 4.2), cy })),
+);
+
+// Each cavity is a 3.4 mm square with one corner chamfered
+const hole = (cx: number, cy: number) =>
+    `M${round(cx - 1.7)} ${round(cy - 1.7)}H${round(cx + 1.7)}V${round(cy + 0.5)}L${round(cx + 0.5)} ${round(cy + 1.7)}H${round(cx - 1.7)}Z`;
+---
+
+<rect class="mf-latch" x={latchX} y="-1.2" width="8" height="1.4" rx="0.4" />
+<path class="mf-body" d={`M1 0H${width}V10.2H0V1Z`} />
+{cavities.map(({ cx, cy }) => (
+    <g>
+        <path class="mf-hole" d={hole(cx, cy)} />
+        <rect class="mf-pin" x={round(cx - 0.7)} y={round(cy - 0.7)} width="1.4" height="1.4" />
+    </g>
+))}
+
+<style>
+    .mf-latch {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.4;
+    }
+
+    .mf-body {
+        fill: var(--board-chip);
+        stroke: var(--board-chip-outline);
+        stroke-width: 0.5;
+    }
+
+    .mf-hole {
+        fill: var(--page-bg);
+    }
+
+    .mf-pin {
+        fill: var(--board-gold);
+    }
+</style>
