@@ -18,6 +18,9 @@ Two palettes (will) live side-by-side:
     --board-pcie: #3c6797;
     --board-pcie-light: #5584b4;
     --board-pcie-dark: #284869;
+    --board-sata: #a23c40;
+    --board-sata-light: #c25257;
+    --board-sata-dark: #5c2022;
     --board-trace: #8a6535;
     --board-trace-edge: #2b2820;
     /* --board-trace-rest: #8a5a2e; */

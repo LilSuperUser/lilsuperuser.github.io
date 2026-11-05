@@ -1,0 +1,66 @@
+---
+// 6 vertical SATA data headers seen from above (3x2 grid)
+const W = 8.2;
+const H = 14.6;
+
+const labels = ["SATA3_0", "SATA3_1", "SATA3_2", "SATA3_3", "SATA3_4", "SATA3_5"];
+const ports = labels.map((label, i) => ({
+    label,
+    x: (i % 3) * 11.4,
+    y: Math.floor(i / 3) * 18,
+}));
+
+// Shell with the stepped double notch at the top right (the key end),
+// and the cavity inside it following the same steps
+const shell = `M0 0H5.4V1H6.8V2.2H${W}V${H}H0Z`;
+const cavity = `M1.1 1.1H4.3V2.1H5.7V3.3H${W - 1.1}V${H - 1.1}H1.1Z`;
+
+// the L-shaped raised wall inside
+const tongue = `M2.6 3.4H3.8V12.2H6.4V${H - 1.1}H2.6Z`;
+---
+
+<g id="sata" transform="translate(422 140)">
+    {ports.map(({ label, x, y }) => (
+        <g transform={`translate(${x} ${y})`}>
+            <path class="sata-shell" d={shell} />
+            <path class="sata-cavity" d={cavity} />
+            <path class="sata-tongue" d={tongue} />
+            <path class="sata-contacts" d="M4.6 3.6V11.92" />
+            <text class="silk sata-label" x={W / 2} y={H + 2.4} text-anchor="middle">
+                {label}
+            </text>
+        </g>
+    ))}
+</g>
+
+<style>
+    .sata-shell {
+        fill: var(--board-sata);
+        stroke: var(--board-sata-dark);
+        stroke-width: 0.3;
+        stroke-linejoin: round;
+    }
+
+    .sata-cavity {
+        fill: var(--board-sata-dark);
+        stroke: var(--board-sata-light);
+        stroke-width: 0.25;
+        stroke-opacity: 0.5;
+    }
+
+    .sata-tongue {
+        fill: var(--board-sata-light);
+    }
+
+    .sata-contacts {
+        fill: none;
+        stroke: var(--board-gold);
+        stroke-width: 0.5;
+        stroke-dasharray: 0.7 0.57;
+        opacity: 0.75;
+    }
+
+    .sata-label {
+        font-size: 1.7px;
+    }
+</style>
