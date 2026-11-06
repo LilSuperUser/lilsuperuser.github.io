@@ -1,0 +1,140 @@
+---
+// The label: name and barcode sticker
+
+// Code 39: every character is 9 elements, bar and space alternating and
+// starting with a bar, 3 wide ("w") and 6 narrow ("n")
+// "*" starts and ends every code
+const code39: Record<string, string> = {
+    "0": "nnnwwnwnn",
+    "1": "wnnwnnnnw",
+    "2": "nnwwnnnnw",
+    "3": "wnwwnnnnn",
+    "4": "nnnwwnnnw",
+    "5": "wnnwwnnnn",
+    "6": "nnwwwnnnn",
+    "7": "nnnwnnwnw",
+    "8": "wnnwnnwnn",
+    "9": "nnwwnnwnn",
+    A: "wnnnnwnnw",
+    B: "nnwnnwnnw",
+    C: "wnwnnwnnn",
+    D: "nnnnwwnnw",
+    E: "wnnnwwnnn",
+    F: "nnwnwwnnn",
+    G: "nnnnnwwnw",
+    H: "wnnnnwwnn",
+    I: "nnwnnwwnn",
+    J: "nnnnwwwnn",
+    K: "wnnnnnnww",
+    L: "nnwnnnnww",
+    M: "wnwnnnnwn",
+    N: "nnnnwnnww",
+    O: "wnnnwnnwn",
+    P: "nnwnwnnwn",
+    Q: "nnnnnnwww",
+    R: "wnnnnnwwn",
+    S: "nnwnnnwwn",
+    T: "nnnnwnwwn",
+    U: "wwnnnnnnw",
+    V: "nwwnnnnnw",
+    W: "wwwnnnnnn",
+    X: "nwnnwnnnw",
+    Y: "wwnnwnnnn",
+    Z: "nwwnwnnnn",
+    "-": "nwnnnnwnw",
+    "*": "nwnnwnwnn",
+};
+
+const serial = "LSU4C00";
+const narrow = 0.25;
+const wide = 0.625;
+const barHeight = 5;
+
+// One path draws all the bars (a narrow gap separates the characters)
+let bx = 0;
+let bars = "";
+for (const ch of `*${serial}*`) {
+    [...code39[ch]].forEach((e, i) => {
+        const w = e === "w" ? wide : narrow;
+        if (i % 2 === 0) bars += `M${bx.toFixed(3)} 0h${w}v${barHeight}h-${w}Z`;
+        bx += w;
+    });
+    bx += narrow;
+}
+const barcodeWidth = bx - narrow;
+
+// 3 mm quiet zone each side (scanners need ts)
+const stickerW = Math.ceil(barcodeWidth + 6);
+const stickerH = 13;
+---
+
+<g id="label">
+    <g transform="translate(30 190)">
+        <text class="brand-name" x="0" y="10">
+            LSU 0x4c00
+        </text>
+        <text class="brand-sub" x="0.4" y="14.6">
+            Tanmay
+        </text>
+    </g>
+
+    <g transform="translate(214 190)">
+        <rect class="tag" width={stickerW} height={stickerH} rx="0.7" />
+        <text class="tag-text" x="3" y="3.2">
+            LilSuperUser · Tanmay · 0x4c00
+        </text>{" "}
+        <g transform={`translate(${(stickerW - barcodeWidth) / 2} 4.4)`}>
+            <path class="tag-bars" d={bars} />
+        </g>
+        <text class="tag-text" x={stickerW / 2} y="11.9" text-anchor="middle">
+            S/N {serial}
+        </text>
+    </g>
+</g>
+
+<style>
+    .brand-name {
+        fill: var(--board-silkscreen);
+        opacity: 0.42;
+        font-family: var(--font-board);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+    }
+
+    .brand-sub {
+        fill: var(--board-silkscreen);
+        opacity: 0.45;
+        font-family: var(--font-board);
+        font-size: 3px;
+        letter-spacing: 0.5px;
+    }
+
+    .tag {
+        fill: var(--board-label);
+        stroke: var(--board-steel-dark);
+        stroke-width: 0.2;
+    }
+
+    .tag-bars {
+        fill: var(--page-bg);
+    }
+
+    .tag-text {
+        fill: var(--page-bg);
+        font-family: var(--font-board);
+        font-size: 1.7px;
+    }
+
+    .fid {
+        fill: var(--board-gold);
+        opacity: 0.85;
+    }
+
+    .fid-ring {
+        fill: none;
+        stroke: var(--board-gold);
+        stroke-width: 0.15;
+        opacity: 0.4;
+    }
+</style>

@@ -16,6 +16,7 @@ import AtxPower from "./board/AtxPower.astro";
 import PcieSlots from "./board/PcieSlots.astro";
 import SataPorts from "./board/SataPorts.astro";
 import Chipset from "./board/Chipset.astro";
+import Label from "./board/Label.astro";
 
 const width = 460;
 const height = 210;
@@ -35,6 +36,7 @@ const holes = [
         <circle class="hole" cx={x} cy={y} r="3.2" />
     ))}
 
+    <Label />
     <Cpu />
     <CpuDecoupling />
     <Vrm />

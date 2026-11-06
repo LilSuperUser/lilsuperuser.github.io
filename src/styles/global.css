@@ -7,6 +7,7 @@ Two palettes (will) live side-by-side:
 :root {
     /* ---- Board palette ---- */
     --board-surface: #14140f;
+    --board-label: #b9b7a9;
     --board-edge: #3a3830;
     --board-chip: #211f19;
     --board-chip-outline: #4a473c;
