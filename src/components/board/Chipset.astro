@@ -1,0 +1,136 @@
+---
+// The chipset (PCH) under a pin-fin aluminium heatsink, seen from above:
+// A chamfered base plate, a grid of small square pins, two push-pins at
+// diagonal corners and plain holes at the other two
+const W = 34;
+const H = 34;
+const c = 2;
+
+const plate = `M${c} 0H${W - c}L${W} ${c}V${H - c}L${W - c} ${H}H${c}L0 ${H - c}V${c}Z`;
+
+// 10 x 10 rectangular aluminium fins, centred on the plate
+const n = 10;
+const pitch = 2.5;
+const pw = 1.8;
+const ph = 1.4;
+
+const spanX = (n - 1) * pitch + pw;
+const spanY = (n - 1) * pitch + ph;
+
+const x0 = (W - spanX) / 2;
+const y0 = (H - spanY) / 2;
+
+// Each row is a dashed line: each dash represents one rectangular fin
+// A second, thinner row slightly above creates the metallic highlight
+const rows = (dy: number) =>
+    Array.from({ length: n }, (_, r) => {
+        const cy = y0 + r * pitch + ph / 2 + dy;
+        return `M${x0} ${cy}H${x0 + spanX}`;
+    }).join("");
+
+const pins = rows(0);
+const shine = rows(-0.32);
+
+const pushPins = [
+    [2.4, 2.4],
+    [W - 2.4, H - 2.4],
+];
+const holes = [
+    [W - 2.4, 2.4],
+    [2.4, H - 2.4],
+];
+---
+
+<g id="chipset" transform="translate(46 140)">
+    <defs>
+        <linearGradient id="sink-sheen" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" style="stop-color: var(--board-sink-light)" stop-opacity="0.3" />
+            <stop offset="0.35" style="stop-color: var(--board-sink-light)" stop-opacity="0.06" />
+            <stop offset="0.5" style="stop-color: var(--board-sink-light)" stop-opacity="0" />
+            <stop offset="0.6" style="stop-color: var(--board-sink-light)" stop-opacity="0.18" />
+            <stop offset="1" style="stop-color: var(--board-sink-light)" stop-opacity="0.02" />
+        </linearGradient>
+    </defs>
+
+    <text class="silk" x={W / 2} y="-3.2" text-anchor="middle">
+        PCH
+    </text>
+    <rect class="silk-outline" x="-1.4" y="-1.4" width={W + 2.8} height={H + 2.8} rx="1.6" />
+
+    <path class="sink-base" d={plate} />
+    <rect class="sink-lip" x="0.9" y="0.9" width={W - 1.8} height={H - 1.8} rx="0.8" />
+
+    <path class="sink-pins" d={pins} stroke-width={pw} />
+    <path class="sink-shine" d={shine} stroke-width="0.34" />
+
+    {holes.map(([hx, hy]) => (
+        <circle class="sink-hole" cx={hx} cy={hy} r="0.9" />
+    ))}
+    {pushPins.map(([px, py]) => (
+        <g transform={`translate(${px} ${py})`}>
+            <circle class="sink-pin-ring" r="1.6" />
+            <circle class="sink-pin-head" r="1.15" />
+            <path class="sink-slot" d="M-0.7 0H0.7M0 -0.7V0.7" />
+        </g>
+    ))}
+
+    <path class="sink-sheen" d={plate} />
+</g>
+
+<style>
+    .sink-base {
+        fill: var(--board-sink-dark);
+        stroke: var(--board-sink);
+        stroke-width: 0.4;
+        stroke-linejoin: round;
+    }
+
+    .sink-lip {
+        fill: none;
+        stroke: var(--board-sink-light);
+        stroke-width: 0.2;
+        opacity: 0.45;
+    }
+
+    .sink-pins {
+        fill: none;
+        stroke: var(--board-sink);
+        stroke-width: 1.4;
+        stroke-dasharray: 1.8 0.7;
+    }
+
+    .sink-shine {
+        fill: none;
+        stroke: var(--board-sink-light);
+        stroke-width: 0.26;
+        stroke-dasharray: 1.8 0.7;
+    }
+
+    .sink-hole {
+        fill: var(--page-bg);
+        stroke: var(--board-sink);
+        stroke-width: 0.3;
+    }
+
+    .sink-pin-ring {
+        fill: var(--board-sink-dark);
+        stroke: var(--board-sink);
+        stroke-width: 0.3;
+    }
+
+    .sink-pin-head {
+        fill: var(--board-sink-light);
+    }
+
+    .sink-slot {
+        fill: none;
+        stroke: var(--board-sink-dark);
+        stroke-width: 0.3;
+        stroke-linecap: round;
+    }
+
+    .sink-sheen {
+        fill: url(#sink-sheen);
+        pointer-events: none;
+    }
+</style>
