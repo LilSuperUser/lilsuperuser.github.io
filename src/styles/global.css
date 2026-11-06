@@ -11,6 +11,12 @@ Two palettes (will) live side-by-side:
     --board-edge: #3a3830;
     --board-chip: #211f19;
     --board-chip-outline: #4a473c;
+    --board-teal: #2f8580;
+    --board-teal-dark: #1b4f4c;
+    --board-amber: #b4833b;
+    --board-amber-dark: #5c3f1c;
+    --board-plum: #6f5a8f;
+    --board-plum-dark: #3f3156;
     --board-gold: #b8924f;
     --board-silkscreen: #d8d4c4;
     --board-mlcc: #6b4f32;

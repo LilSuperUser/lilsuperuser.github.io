@@ -17,6 +17,7 @@ import PcieSlots from "./board/PcieSlots.astro";
 import SataPorts from "./board/SataPorts.astro";
 import Chipset from "./board/Chipset.astro";
 import Label from "./board/Label.astro";
+import Headers from "./board/Headers.astro";
 
 const width = 460;
 const height = 210;
@@ -37,6 +38,7 @@ const holes = [
     ))}
 
     <Label />
+    <Headers />
     <Cpu />
     <CpuDecoupling />
     <Vrm />

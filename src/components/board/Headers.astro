@@ -1,0 +1,130 @@
+---
+// The pin headers: 2.54 mm pitch, 0.64 mm square pins
+const pitch = 2.54;
+const pin = 0.64;
+
+interface Header {
+    label: string;
+    x: number;
+    y: number;
+    cols: number;
+    rows: 1 | 2;
+    tone: "teal" | "amber" | "plum" | "black";
+    missing?: number[]; // Pin numbers left out as the key
+}
+
+const headers: Header[] = [
+    { label: "CPU_FAN", x: 128, y: 9, cols: 4, rows: 1, tone: "teal" },
+    { label: "SYS_FAN1", x: 266, y: 9, cols: 4, rows: 1, tone: "plum" },
+    { label: "SYS_FAN2", x: 268, y: 194, cols: 4, rows: 1, tone: "plum" },
+    { label: "USB_1_2", x: 400, y: 56, cols: 5, rows: 2, tone: "amber", missing: [9] },
+    { label: "USB_3_4", x: 400, y: 76, cols: 5, rows: 2, tone: "amber", missing: [9] },
+    { label: "F_PANEL", x: 400, y: 104, cols: 5, rows: 2, tone: "black", missing: [8] },
+];
+
+const layout = headers.map((h) => {
+    // A 1-row fan shroud is deeper than the pin row, a 2-row header isn't
+    const padX = 0.9;
+    const padY = h.rows === 1 ? 1.7 : 0.9;
+    const W = h.cols * pitch + 2 * padX;
+    const H = h.rows * pitch + 2 * padY;
+
+    // Pins are numbered along the columns, odd ones on the bottom row
+    const pins: string[] = [];
+    for (let r = 0; r < h.rows; r++) {
+        for (let c = 0; c < h.cols; c++) {
+            const n = h.rows === 1 ? c + 1 : c * 2 + (r === 1 ? 1 : 2);
+            if (h.missing?.includes(n)) continue;
+            const px = padX + c * pitch + (pitch - pin) / 2;
+            const py = padY + r * pitch + (pitch - pin) / 2;
+            pins.push(`M${px.toFixed(2)} ${py.toFixed(2)}h${pin}v${pin}h-${pin}Z`);
+        }
+    }
+
+    const pin1y = padY + (h.rows === 1 ? 0 : pitch) + pitch / 2;
+    return { ...h, W, H, pins: pins.join(""), pin1y };
+});
+---
+
+<g id="headers">
+    {layout.map((h) => (
+        <g class={`tone-${h.tone}`} transform={`translate(${h.x} ${h.y})`}>
+            <text class="silk hdr-label" x="0" y="-2.2">
+                {h.label}
+            </text>
+            <circle class="hdr-pin1" cx="-1.5" cy={h.pin1y} r="0.4" />
+            <rect class="hdr-body" width={h.W} height={h.H} rx="0.5" />
+            <rect
+                class="hdr-cavity"
+                x="0.9"
+                y="0.9"
+                width={h.W - 1.8}
+                height={h.H - 1.8}
+                rx="0.2"
+            />
+            <path class="hdr-shine" d={`M0.7 0.3H${h.W - 0.7}`} />
+            <rect class="hdr-key" x={h.W / 2 - 0.9} y="0.9" width="1.8" height="0.8" />
+            <path class="hdr-pins" d={h.pins} />
+        </g>
+    ))}
+</g>
+
+<style>
+    .tone-teal {
+        --hdr: var(--board-teal);
+        --hdr-dark: var(--board-teal-dark);
+    }
+
+    .tone-amber {
+        --hdr: var(--board-amber);
+        --hdr-dark: var(--board-amber-dark);
+    }
+
+    .tone-black {
+        --hdr: var(--board-chip);
+        --hdr-dark: var(--page-bg);
+    }
+
+    .tone-plum {
+        --hdr: var(--board-plum);
+        --hdr-dark: var(--board-plum-dark);
+    }
+
+    .hdr-body {
+        fill: var(--hdr);
+        stroke: var(--hdr-dark);
+        stroke-width: 0.3;
+    }
+
+    .hdr-cavity {
+        fill: color-mix(in srgb, var(--hdr) 55%, black);
+    }
+
+    .hdr-key {
+        fill: var(--hdr);
+    }
+
+    .hdr-shine {
+        fill: none;
+        stroke: color-mix(in srgb, var(--hdr), white 40%);
+        stroke-width: 0.3;
+        stroke-linecap: round;
+        opacity: 0.7;
+    }
+
+    .hdr-pins {
+        fill: var(--board-gold);
+        stroke: color-mix(in srgb, var(--hdr) 35%, black);
+        stroke-width: 0.25;
+        paint-order: stroke;
+    }
+
+    .hdr-pin1 {
+        fill: var(--board-silkscreen);
+        opacity: 0.6;
+    }
+
+    .hdr-label {
+        font-size: 2.1px;
+    }
+</style>
